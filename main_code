@@ -1,0 +1,382 @@
+//Creating a Struct to replace delay with millis
+struct Timer
+{
+    unsigned long startTime; //defining start time
+
+    void reset()
+    {
+        startTime = millis(); //start-time is redifined as current time when reset. 
+    }
+
+    unsigned long getElapsedTime()
+    {
+        return millis() - startTime; //returns time passed since last reset.
+    }
+
+    bool isFinished(unsigned long duration) //enter milliseconds for duration for each timer
+    {
+        return getElapsedTime() >= duration; //checks if time passed is larger than wanted duration.
+    }
+};
+
+//including needed librarys
+#include <SPI.h>
+#include <MFRC522.h>
+#include <Servo.h>
+#include <WiFi.h>
+#include <PubSubClient.h>
+
+//defining pins needed for RFID
+#define SDA_PIN 5
+#define RST_PIN 17
+
+//declares doorservo and sunservo as instances of the Servo class
+Servo doorservo;
+Servo sunservo;
+
+//creating different timers
+Timer suntimer;
+Timer maintimer;
+Timer doortimer;
+
+//setting up WiFi- name and password. 
+const char* ssid = "Noras internett";
+const char* password = "internettpassord";
+
+//defining the mqtt server
+const char* mqtt_server = "192.168.137.151";
+
+//defining pin-numbers
+int temppin1 = 32;
+int temppin2 = 35;
+int temppin3 = 34;
+int leftphotopin = 39;
+int rightphotopin = 36;
+int doorpin = 21;
+int sunpin = 22;
+int fanpin1 = 33;
+int fanpin2 = 33;
+int fanpin3 = 33;
+int largefanpin = 33;
+
+//creating mqtt client, named "client"
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+//defining global value, so its not redefined each time its supposed to be summarized. 
+int sum_of_energy = 0;
+
+//creating an empty string named Switch
+String Switch = "";
+
+
+byte readCard[4]; //makes array that can hold four bytes of data
+// Defining card-key for the right cards
+byte arnecard[] = { 0xCA, 0x23, 0x01, 0xDB };  
+byte evencard[] = { 0x23, 0x3C, 0x57, 0x33 };  
+MFRC522 rfid(SDA_PIN, RST_PIN); //setting defined pins to RFID
+MFRC522::MIFARE_Key key; //creating a key to authenticate cards
+bool registered = false; //setting registered to "false"
+
+//creating a function to set up wifi
+void setup_wifi() {
+  delay(10);
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  // Starting by connecting to my WiFi network
+  WiFi.begin(ssid, password);
+
+  //while the WiFi is not connected it prints a "." every halv a second
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  //prints when you are connected to wifi 
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+//creating a function to turn on a DC-motor
+void fan(int fanpin, bool fan_state) { //when function is called, you enter wanted pin, and true or false. 
+  //if true is entered the fan will turn on
+  if (fan_state == true){  
+    digitalWrite(fanpin, HIGH);
+  }
+  //if false is entered the fan will be turned off. 
+  else{
+    digitalWrite(fanpin, LOW);
+  }
+
+}
+
+//creating a function to retreive information from MQTT-topics already subscribed to
+void callback(char* topic, byte* message, unsigned int length) {
+  //creating Strings for the messages
+  String messageTemp; 
+  String messagecooling;
+
+  for (int i = 0; i < length; i++) { //goes through the message character for character
+    Serial.print((char)message[i]); //printing the retreived message
+    //adding the message to the Strings
+    messageTemp += (char)message[i];
+    messagecooling += (char)message[i];
+  }
+  // Check if the message came from the topic "ESP32/button_pressed"
+  if (String(topic) == "ESP32/button_pressed") {
+    //if the message tells us that switch1 is pressed, the string Switch gets the value switch1
+    if (messageTemp == "switch1") {
+      Serial.println("bryter 1 på");
+      Switch = "switch1";
+    }
+    //if the message tells us that switch2 is pressed, the string Switch gets the value switch2
+    if (messageTemp == "switch2") {
+      Serial.println("bryter 2 på");
+      Switch = "switch2";
+    }
+    //if the message tells us that switch3 is pressed, the string Switch gets the value switch3
+    if (messageTemp == "switch3") {
+      Serial.println("bryter 3 på");
+      Switch = "switch3";
+    }
+    //if the message is "false", the string Switch gets the value false
+    if (messageTemp == "false") {
+      Serial.println("alle brytere av");
+      Switch = "false";
+    }
+  }
+  // Check if the message came from the topic "ESP32/cooling"
+  if (String(topic) == "ESP32/cooling") {
+    //if the message tells us that cooldown-button1 is pressed
+    if (messagecooling == "cooldown1") {
+      Serial.println("knapp 1 trykket på");
+      fan(fanpin1, true); //turns on fan number 1
+    }
+    //if the message tells us that cooldown-button2 is pressed
+    if (messagecooling == "cooldown2") {
+      Serial.println("knapp 2 trykket på");
+      fan(fanpin2, true); //turns on fan number 2
+    }
+    //if the message tells us that cooldown-button3 is pressed
+    if (messagecooling == "cooldown3") {
+      Serial.println("knapp 3 trykket på");
+      fan(fanpin3, true); //turns on fan number 3
+    }
+    //if the message tells us that off-button is pushed
+    if (messagecooling == "off") {
+      //turns off all fans
+      fan(fanpin1, false); 
+      fan(fanpin2, false);
+      fan(fanpin3, false);
+    }
+  }
+}
+
+void setup() {
+  Serial.begin(115200); //setting baud rate
+  SPI.begin(); //initialize SPI
+  rfid.PCD_Init(); //Initialize the RFID reader and set it up for communication
+  doorservo.attach(doorpin); //setting doorservo to correct pin
+  sunservo.attach(sunpin); //setting sunservo to correct pin
+  setup_wifi(); //calling function to set up WiFi
+
+  // Connect to MQTT broker
+  client.setServer(mqtt_server, 1883);
+  client.setCallback(callback);
+
+  //setting pins to input or output
+  pinMode(temppin1, INPUT);
+  pinMode(temppin2, INPUT);
+  pinMode(temppin3, INPUT);
+  pinMode(leftphotopin, INPUT);
+  pinMode(rightphotopin, INPUT);
+  pinMode(fanpin1, OUTPUT);
+  pinMode(fanpin2, OUTPUT);
+  pinMode(fanpin3, OUTPUT);
+  pinMode(largefanpin, OUTPUT);
+}
+
+//creating function to connect to MQTT
+void reconnect() {
+  // if not connected to MQTT-broker, this will loop until connected
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    // Attempt to connect
+    if (client.connect("ESP8266Client")) {
+      Serial.println("connected");
+      // Subscribe to wanted topics
+      client.subscribe("ESP32/button_pressed");
+      client.subscribe("ESP32/cooling");
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // if failed, waits 5 seconds before retrying
+      delay(5000); 
+    }
+  }
+}
+
+//creating function for the temperature-sensors
+void temperaturereadings() {
+  //taking temperature-readings
+  int temperature1 = analogRead(temppin1);
+  int temperature2 = analogRead(temppin2);
+  int temperature3 = analogRead(temppin3);
+  float no_temp1 = 0.00; //defining value
+  //maping values, so the temperatures are in celsius
+  temperature1 = map(temperature1, 0, 4095, 0, 50);
+  temperature2 = map(temperature2, 0, 4095, 0, 50);
+  temperature3 = map(temperature3, 0, 4095, 0, 50);
+
+  //creating and publishing a JSON-string with all temoerature-values to the topic "ESP32/all_temps"
+  String all_temperatures = "{\"tempsensor1\": " + String(temperature1) + ", \"tempsensor2\": " + String(temperature2) + ", \"tempsensor3\": " + String(temperature3) + "}";
+  client.publish("ESP32/all_temps", all_temperatures.c_str());
+
+  //if switch1 is pressed 
+  if (Switch == "switch1") {
+    //Creating and publishing a JSON-string with temperature1 to the topic "ESP32/temperature"
+    String temp1 = "{\"message\": " + String(temperature1) + "}";
+    client.publish("ESP32/temperature", temp1.c_str());
+  }
+  //if switch2 is pressed 
+  if (Switch == "switch2") {
+    //Creating and publishing a JSON-string with temperature2 to the topic "ESP32/temperature"
+    String temp2 = "{\"message\": " + String(temperature2) + "}";
+    client.publish("ESP32/temperature", temp2.c_str());
+  }
+  //if switch3 is pressed 
+  if (Switch == "switch3") {
+    //Creating and publishing a JSON-string with temperature3 to the topic "ESP32/temperature"
+    String temp3 = "{\"message\": " + String(temperature3) + "}";
+    client.publish("ESP32/temperature", temp3.c_str());
+  }
+  //if the switches turns off
+  if (Switch == "false") {
+    //Creating and publishing a JSON-string with the value 0 to the topic "ESP32/temperature"
+    String no_temp = "{\"message\": " + String(no_temp1) + "}";
+    client.publish("ESP32/temperature", no_temp.c_str());
+  }
+  // if all temp-readings are above 40 degrees
+  if (temperature1 > 40 && (temperature2 > 40) && (temperature3 > 40)) {
+    fan(largefanpin, true); //using fan-function to turn on large fan
+    //creating and publishing JSON-string with the message "emergency cooldown of all units!" to the topic "ESP32/emergency cooling"
+    String emergency_cooling = "{\"cooling\": \"emergency cooldown of all units!\"}";
+    client.publish("ESP32/emergency_cooling", emergency_cooling.c_str());
+  } 
+  //if the temperatures are not too hot
+  else { 
+    //creating and publishing JSON-string with the message "all is good" to the topic "ESP32/emergency cooling"
+    String emergency_cooling = "{\"cooling\": \"all is good\"}";
+    client.publish("ESP32/emergency_cooling", emergency_cooling.c_str());
+  }
+}
+
+//creating function for the solarpannel
+void solarpannel() {
+  //reading the brightness on each photoresistor
+  int left = analogRead(leftphotopin);
+  int right = analogRead(rightphotopin);
+
+  if (abs(left - right) > 30) { //checking if the difference between the values are higher than 30
+    int last_pos = sunservo.read(); //reading the current position of the servo
+    if (left > right) { //checks if the left photoresistor reads a higher value than the right 
+      int next_pos = last_pos + 3; //sets the new position as the old plus three degrees
+      sunservo.write(next_pos); //moves to the new position
+    } else if (right > left) { //checks if the right photoresistor reads a higher value than the left
+      int next_pos = last_pos - 3; //sets the new position as the old minus three degrees
+      sunservo.write(next_pos); //moves to the new position
+    }
+  }
+
+  int energy_now = (left + right) / 1000;          //made up calculation to kWh
+  sum_of_energy = sum_of_energy + energy_now;  //summering av energi fra programstart
+  //creating and publishing a JSON-string with the current earned energy and summarized energy to the topic "ESP32/energy_saved"
+  String energy = "{\"energy_now\": " + String(energy_now) + ", \"sum_of_energy\": " + String(sum_of_energy) + "}";
+  client.publish("ESP32/energy_saved", energy.c_str());
+}
+
+//creating a function for the RFID-reader
+void RFID_check() {
+  rfid.PCD_Init(); //initialize the RFID
+  // Check if a new card is present
+  if (!rfid.PICC_IsNewCardPresent())
+    return;
+  // Read the card serial number
+  if (!rfid.PICC_ReadCardSerial())
+    return;
+
+  // Get the type of the card that was read
+  MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
+
+  // Copy the card serial number into an array
+  for (int i = 0; i < 4; i++) {
+    readCard[i] = rfid.uid.uidByte[i];
+    Serial.println(rfid.uid.uidByte[i], HEX); // Print the card serial number in hexadecimal format
+
+  }
+  rfid.PICC_HaltA(); //preparing for next read
+  if ((uint32_t)readCard[0, 1, 2, 3] == arnecard[0, 1, 2, 3]) {  // checks if the read card is Arnes card
+    registered = true; 
+    Serial.println("Arnes card!");
+    if (registered == true) { 
+      doorservo.write(90); //door opens
+      char msgpersonell[50];
+      int RFID = 1;
+      //creates JSON-string with message that Arnes card is scanned and publishes it to the topic "ESP32/RFID"
+      String RFID_print = "{\"person\": \"Arne\", \"kort\": " + String(RFID) + "}"; 
+      client.publish("ESP32/RFID", RFID_print.c_str()); 
+      while (!doortimer.isFinished(5000)){
+        //waits 5 seconds
+      }
+      doorservo.write(0); //door closes
+      
+    }
+    registered = false;
+    rfid.PCD_Init();  // initialize the RFID
+  }
+  if ((uint32_t)readCard[0, 1, 2, 3] == evencard[0, 1, 2, 3]) {  // checks if the read card is Evens card
+    Serial.println("Evens card!");
+    if (registered == true) {
+      doorservo.write(90); //door opens
+      char msgpersonell[50];
+      int RFID = 1;
+      //creates JSON-string with message that Evens card is scanned and publishes it to the topic "ESP32/RFID"
+      String RFID_print = "{\"person\": \"Even\", \"kort\": " + String(RFID) + "}";
+      client.publish("ESP32/RFID", RFID_print.c_str());
+      while (!doortimer.isFinished(5000)){
+        //waits 5 seconds
+      }
+      doorservo.write(0); //door closes
+    }
+    registered = false;
+    rfid.PCD_Init();  // Initialize the RFID
+
+  } else if ((uint32_t)readCard[0, 1, 2, 3] != arnecard[0, 1, 2, 3] && (uint32_t)readCard[0, 1, 2, 3] != evencard[0, 1, 2, 3]) {  // sjekker om kortet har tilgang, her er det ikke tilgang
+    Serial.print("her er det ikke adgang");
+  }
+}
+
+void loop() {
+  //reconnects if not connected to MQTT-broker
+  if (!client.connected()) {
+    reconnect(); 
+  }
+  client.loop(); //loops the client
+  
+  //using timer to go through RFID_check and temperaturereadings every 1 second
+  if (maintimer.isFinished(1000)) {
+    RFID_check(); 
+    temperaturereadings();
+  }
+  
+  //using timer to go through solarpannel every 40ms, this works as a delay for the servo-adjustment
+  if (suntimer.isFinished(40)){
+    solarpannel();
+
+  }
+
+}
