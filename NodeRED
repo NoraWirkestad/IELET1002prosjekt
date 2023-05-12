@@ -1,0 +1,1099 @@
+[
+    {
+        "id": "b22c1704b4100915",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a4b1f62e6d022319",
+        "type": "mqtt in",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "topic": "ESP32/temperature",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9b295db82616e7fb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 180,
+        "wires": [
+            [
+                "3a96a69a51abfa57"
+            ]
+        ]
+    },
+    {
+        "id": "f60cecce3b24d56f",
+        "type": "ui_gauge",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "group": "c80aac044b4cea01",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temp",
+        "label": "",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "60",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 590,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "8c61f68319ced868",
+        "type": "ui_switch",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "label": "switch2",
+        "tooltip": "",
+        "group": "c80aac044b4cea01",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "switch2",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "x": 100,
+        "y": 80,
+        "wires": [
+            [
+                "6dc0173087716049"
+            ]
+        ]
+    },
+    {
+        "id": "aefd0271c8ec1933",
+        "type": "ui_switch",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "label": "switch3",
+        "tooltip": "",
+        "group": "c80aac044b4cea01",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "switch3",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "x": 100,
+        "y": 120,
+        "wires": [
+            [
+                "6dc0173087716049"
+            ]
+        ]
+    },
+    {
+        "id": "62a1baf216d75515",
+        "type": "ui_switch",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "label": "switch1",
+        "tooltip": "",
+        "group": "c80aac044b4cea01",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "switch1",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "x": 100,
+        "y": 40,
+        "wires": [
+            [
+                "6dc0173087716049"
+            ]
+        ]
+    },
+    {
+        "id": "6dc0173087716049",
+        "type": "mqtt out",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "topic": "ESP32/button_pressed",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8b9c0de6cf7c6a03",
+        "x": 450,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "def16ad1e200a993",
+        "type": "mqtt in",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "topic": "ESP32/RFID",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9b295db82616e7fb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 720,
+        "wires": [
+            [
+                "106ef0cd84240a88",
+                "c2d5183e0e969efc"
+            ]
+        ]
+    },
+    {
+        "id": "67bbcbfb0ebd14d7",
+        "type": "ui_text",
+        "z": "b22c1704b4100915",
+        "group": "7b3b28c0e4dde46b",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Checked in",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "x": 630,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "48eefe1643778efd",
+        "type": "ui_text",
+        "z": "b22c1704b4100915",
+        "group": "d3ad590ef0dcc94f",
+        "order": 1,
+        "width": 7,
+        "height": 1,
+        "name": "Automatic cooldown",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "x": 640,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "b55ed3e622a47f2b",
+        "type": "ui_button",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "group": "d3ad590ef0dcc94f",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "cooldown of unit 1",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "red",
+        "icon": "",
+        "payload": "cooldown1",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 270,
+        "y": 540,
+        "wires": [
+            [
+                "36f361c1fba8fb71"
+            ]
+        ]
+    },
+    {
+        "id": "93f69d070bbbafd9",
+        "type": "ui_button",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "group": "d3ad590ef0dcc94f",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "cooldown of unit 2",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "red",
+        "icon": "",
+        "payload": "cooldown2",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 270,
+        "y": 580,
+        "wires": [
+            [
+                "36f361c1fba8fb71"
+            ]
+        ]
+    },
+    {
+        "id": "1c6104d4f6520eba",
+        "type": "ui_button",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "group": "d3ad590ef0dcc94f",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "cooldown of unit 3",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "red",
+        "icon": "",
+        "payload": "cooldown3",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 270,
+        "y": 620,
+        "wires": [
+            [
+                "36f361c1fba8fb71"
+            ]
+        ]
+    },
+    {
+        "id": "36f361c1fba8fb71",
+        "type": "mqtt out",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "topic": "ESP32/cooling",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9b295db82616e7fb",
+        "x": 560,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "3a96a69a51abfa57",
+        "type": "change",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.message",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 180,
+        "wires": [
+            [
+                "f60cecce3b24d56f"
+            ]
+        ]
+    },
+    {
+        "id": "106ef0cd84240a88",
+        "type": "change",
+        "z": "b22c1704b4100915",
+        "name": "Setting card to person",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.person",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 720,
+        "wires": [
+            [
+                "67bbcbfb0ebd14d7"
+            ]
+        ]
+    },
+    {
+        "id": "5e3a5e2e6db5c979",
+        "type": "mqtt in",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "topic": "ESP32/emergency_cooling",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9b295db82616e7fb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 480,
+        "wires": [
+            [
+                "20c1b59814f7bdd8"
+            ]
+        ]
+    },
+    {
+        "id": "5cc619c51d58d5c1",
+        "type": "ui_chart",
+        "z": "b22c1704b4100915",
+        "name": "Temperature-graph",
+        "group": "1c65108e50b1478c",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": " ",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "50",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "604800",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 730,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e83ef64bf516bf2a",
+        "type": "mqtt in",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "topic": "ESP32/all_temps",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9b295db82616e7fb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 300,
+        "wires": [
+            [
+                "479bbdb25efa5283",
+                "c9fd01ac95ceec0f",
+                "6a3ece825a0fcecb"
+            ]
+        ]
+    },
+    {
+        "id": "479bbdb25efa5283",
+        "type": "change",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.tempsensor1",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "temp1",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 240,
+        "wires": [
+            [
+                "5cc619c51d58d5c1"
+            ]
+        ]
+    },
+    {
+        "id": "c9fd01ac95ceec0f",
+        "type": "change",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.tempsensor2",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "temp2",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 300,
+        "wires": [
+            [
+                "5cc619c51d58d5c1"
+            ]
+        ]
+    },
+    {
+        "id": "6a3ece825a0fcecb",
+        "type": "change",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.tempsensor3",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "temp3",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 360,
+        "wires": [
+            [
+                "5cc619c51d58d5c1"
+            ]
+        ]
+    },
+    {
+        "id": "41751a737e942e3e",
+        "type": "ui_button",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "group": "1c65108e50b1478c",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "reset",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "[]",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 610,
+        "y": 240,
+        "wires": [
+            [
+                "5cc619c51d58d5c1"
+            ]
+        ]
+    },
+    {
+        "id": "5e8ebafb890269ea",
+        "type": "ui_text",
+        "z": "b22c1704b4100915",
+        "group": "7b3b28c0e4dde46b",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "timestamp",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 550,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "c2d5183e0e969efc",
+        "type": "function",
+        "z": "b22c1704b4100915",
+        "name": "timestamp",
+        "func": "var d = new Date();\nmsg.payload = d.toLocaleTimeString();\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 800,
+        "wires": [
+            [
+                "5e8ebafb890269ea"
+            ]
+        ]
+    },
+    {
+        "id": "20c1b59814f7bdd8",
+        "type": "change",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.cooling",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 480,
+        "wires": [
+            [
+                "48eefe1643778efd",
+                "7c89922cdf5962bb"
+            ]
+        ]
+    },
+    {
+        "id": "13a3b24a60a7385c",
+        "type": "mqtt in",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "topic": "ESP32/energy_saved",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9b295db82616e7fb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 880,
+        "wires": [
+            [
+                "5ad043d4868ffa5f",
+                "b31a953598d5831d"
+            ]
+        ]
+    },
+    {
+        "id": "296c727e122d7ddd",
+        "type": "ui_chart",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "group": "659647ae37c64007",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 570,
+        "y": 880,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6a884f9922035fb5",
+        "type": "ui_text_input",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "label": "",
+        "tooltip": "",
+        "group": "008b7659e70e22d8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "mode": "text",
+        "delay": 300,
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 580,
+        "y": 960,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5ad043d4868ffa5f",
+        "type": "change",
+        "z": "b22c1704b4100915",
+        "name": "energy now",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.energy_now",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 370,
+        "y": 880,
+        "wires": [
+            [
+                "296c727e122d7ddd"
+            ]
+        ]
+    },
+    {
+        "id": "b31a953598d5831d",
+        "type": "change",
+        "z": "b22c1704b4100915",
+        "name": "sum of energy",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.sum_of_energy",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 960,
+        "wires": [
+            [
+                "6a884f9922035fb5"
+            ]
+        ]
+    },
+    {
+        "id": "0745cc37198cf26c",
+        "type": "ui_text",
+        "z": "b22c1704b4100915",
+        "group": "008b7659e70e22d8",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "kWh",
+        "format": "",
+        "layout": "row-spread",
+        "x": 750,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "3fef8dd6b3e56edc",
+        "type": "ui_button",
+        "z": "b22c1704b4100915",
+        "name": "",
+        "group": "d3ad590ef0dcc94f",
+        "order": 9,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "fan off",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "off",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 310,
+        "y": 660,
+        "wires": [
+            [
+                "36f361c1fba8fb71"
+            ]
+        ]
+    },
+    {
+        "id": "6559f83e2d921303",
+        "type": "remote-access",
+        "z": "b22c1704b4100915",
+        "confignode": "53dc94d96143c318",
+        "name": "",
+        "verbose": 0,
+        "x": 820,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7c89922cdf5962bb",
+        "type": "function",
+        "z": "b22c1704b4100915",
+        "name": "function 4",
+        "func": "var message = msg.payload;\nvar messagesent = global.get(\"hasSentMessage\")\nif (message === \"emergency cooldown of all units!\") {\n    if (messagesent==false) {\n        msg.payload = { \"title\": \"Emergency cooling!\", \"body\": \"all units too hot\" };\n        messagesent = true;\n        global.set(\"hasSentMessage\", messagesent)\n        return msg;\n    }\n}\nif (message === \"all is good\") {\n    messagesent=false;\n    global.set(\"hasSentMessage\", messagesent)\n}\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\nglobal.set(\"hasSentMessage\", false)",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 420,
+        "wires": [
+            [
+                "d4c0c6846bd3cbd5"
+            ]
+        ]
+    },
+    {
+        "id": "d4c0c6846bd3cbd5",
+        "type": "remote-notification",
+        "z": "b22c1704b4100915",
+        "confignode": "53dc94d96143c318",
+        "name": "",
+        "notificationTitle": "payload.title",
+        "notificationTitleType": "msg",
+        "notificationBody": "payload.body",
+        "notificationBodyType": "msg",
+        "notificationSound": "default",
+        "notificationSoundComputed": "payload.sound",
+        "notificationSoundComputedType": "msg",
+        "output": 1,
+        "x": 770,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bdc30f9b31d12903",
+        "type": "ui_spacer",
+        "z": "b22c1704b4100915",
+        "name": "spacer",
+        "group": "d3ad590ef0dcc94f",
+        "order": 2,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "a6e5c8a6668ba0f8",
+        "type": "ui_spacer",
+        "z": "b22c1704b4100915",
+        "name": "spacer",
+        "group": "d3ad590ef0dcc94f",
+        "order": 3,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "5534870b5db135c2",
+        "type": "ui_spacer",
+        "z": "b22c1704b4100915",
+        "name": "spacer",
+        "group": "d3ad590ef0dcc94f",
+        "order": 4,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "a4e86258fb260793",
+        "type": "ui_spacer",
+        "z": "b22c1704b4100915",
+        "name": "spacer",
+        "group": "d3ad590ef0dcc94f",
+        "order": 5,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "2cab8d8f21ed962b",
+        "type": "ui_spacer",
+        "z": "b22c1704b4100915",
+        "name": "spacer",
+        "group": "7b3b28c0e4dde46b",
+        "order": 1,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "9b295db82616e7fb",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "192.168.137.151",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "c80aac044b4cea01",
+        "type": "ui_group",
+        "name": "Temperature",
+        "tab": "7fdd983932fc76ca",
+        "order": 1,
+        "disp": true,
+        "width": 10,
+        "collapse": false
+    },
+    {
+        "id": "8b9c0de6cf7c6a03",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "192.168.137.151",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "7b3b28c0e4dde46b",
+        "type": "ui_group",
+        "name": "At-work-list",
+        "tab": "7fdd983932fc76ca",
+        "order": 3,
+        "disp": false,
+        "width": "7",
+        "collapse": false
+    },
+    {
+        "id": "d3ad590ef0dcc94f",
+        "type": "ui_group",
+        "name": "Cooldown",
+        "tab": "7fdd983932fc76ca",
+        "order": 2,
+        "disp": true,
+        "width": "7",
+        "collapse": false
+    },
+    {
+        "id": "1c65108e50b1478c",
+        "type": "ui_group",
+        "name": "temperature-history",
+        "tab": "8d971a047afd8c26",
+        "order": 1,
+        "disp": true,
+        "width": "14",
+        "collapse": false
+    },
+    {
+        "id": "659647ae37c64007",
+        "type": "ui_group",
+        "name": "chart",
+        "tab": "4c6a2c17f2c16762",
+        "order": 1,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "008b7659e70e22d8",
+        "type": "ui_group",
+        "name": "total energy saved today",
+        "tab": "4c6a2c17f2c16762",
+        "order": 2,
+        "disp": true,
+        "width": "9",
+        "collapse": false
+    },
+    {
+        "id": "53dc94d96143c318",
+        "type": "remote-config",
+        "name": "Node-RED UI",
+        "host": "localhost",
+        "protocol": "http",
+        "port": "1880",
+        "baseurl": "/ui",
+        "instancehash": "gn6zuu4etrejznswvcs7d5kqpwp30y3463r3tm6ksawqh3br98wt4tt72kmno0d8",
+        "server": "nodered02.remote-red.com",
+        "region": "de"
+    },
+    {
+        "id": "7fdd983932fc76ca",
+        "type": "ui_tab",
+        "name": "Overview",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "8d971a047afd8c26",
+        "type": "ui_tab",
+        "name": "Temperature history",
+        "icon": "dashboard",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "4c6a2c17f2c16762",
+        "type": "ui_tab",
+        "name": "Solar-pannel",
+        "icon": "dashboard",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    }
+]
